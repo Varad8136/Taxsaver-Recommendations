@@ -1,27 +1,15 @@
-
 import pandas as pd
+from tax_recommendation_engine import generate_recommendations
 
-def inspect_data(file_path):
-    print("📂 Loading dataset...\n")
-    df = pd.read_csv(file_path)
+df = pd.read_csv("../data/raw/financial_data.csv")
 
-    print("🔹 First 5 rows of the dataset:")
-    print(df.head())
-
-    print("\n🔹 Dataset structure & data types:")
-    print(df.info())
-
-    print("\n🔹 Statistical summary (numerical columns):")
-    print(df.describe())
-
-    print("\n🔹 Missing values per column:")
-    print(df.isnull().sum())
-
-    print("\n🔹 Column names:")
-    print(df.columns.tolist())
-
-    return df
-
-
-if __name__ == "__main__":
-    inspect_data("../data/raw/financial_data.csv")
+# Example: apply engine to first 5 rows (assuming columns exist)
+for i in range(5):
+    user = {
+        "gross_income": df.iloc[i]["income"],
+        "age": df.iloc[i]["age"],
+        "risk_appetite": "medium",  # or map from data
+        # add more mappings...
+    }
+    result = generate_recommendations(user)
+    print(f"User {i+1}:", result["recommended_regime"], result["potential_savings"])
